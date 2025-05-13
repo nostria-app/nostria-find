@@ -1,0 +1,137 @@
+<div class="profile-container">
+  <!-- Header with back button and theme toggle -->
+  <header class="profile-header">
+    <button (click)="goToSearch()" class="back-button">← Back to Search</button>
+    <button (click)="toggleTheme()" class="theme-toggle">
+      <span>{{ theme() === 'dark' ? '☀️' : '🌙' }}</span>
+    </button>
+  </header>
+  
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading profile...</p>
+    </div>
+  }
+  
+  <!-- Error state -->
+  @if (error() && !loading()) {
+    <div class="error-container">
+      <h2>Error</h2>
+      <p>{{ error() }}</p>
+      <button (click)="goToSearch()" class="back-button">Try Again</button>
+    </div>
+  }
+  
+  <!-- Profile content -->
+  @if (profile() && !loading() && !error()) {
+    <div class="profile-content">
+      <!-- Profile info column -->
+      <div class="profile-info">        <div class="profile-header-bg" [style.background-image]="'url(' + getImageUrl(profile().banner, 'banner') + ')'"></div>
+        
+        <div class="profile-details">
+          <div class="profile-avatar">
+            <img [src]="getImageUrl(profile().picture, 'avatar')" alt="Profile Picture" />
+          </div>
+          
+          <h1 class="profile-name">{{ profile().name || 'Anonymous' }}</h1>
+          
+          @if (profile().display_name && profile().display_name !== profile().name) {
+            <h2 class="profile-display-name">{{ profile().display_name }}</h2>
+          }
+          
+          @if (profile().nip05) {
+            <div class="profile-nip05">
+              <span class="verified-icon">✓</span>
+              <span>{{ profile().nip05 }}</span>
+            </div>
+          }
+          
+          @if (profile().about) {
+            <p class="profile-bio">{{ profile().about }}</p>
+          }
+          
+          <div class="profile-pubkey">
+            <div class="pubkey-label">Public Key (npub)</div>
+            <div class="pubkey-value">{{ profile().npub }}</div>
+          </div>
+          
+          <!-- Additional info -->
+          @if (profile().website || profile().lud16) {
+            <div class="profile-links">
+              @if (profile().website) {
+                <a [href]="profile().website" target="_blank" class="profile-link">
+                  🌐 Website
+                </a>
+              }
+              
+              @if (profile().lud16) {
+                <div class="profile-link">
+                  ⚡ {{ profile().lud16 }}
+                </div>
+              }
+            </div>
+          }
+          
+          <!-- Badges -->
+          @if (badges() && badges().length > 0) {
+            <div class="profile-badges">
+              <h3>Badges</h3>
+              <div class="badges-list">
+                @for (badge of badges(); track badge.id) {
+                  <div class="badge-item" [title]="badge.content">
+                    🏆
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- Client links column -->
+      <div class="client-links">
+        <h3>Open in Nostr client</h3>
+        
+        <!-- Preferred client (if any) -->
+        @if (preferredClient()) {
+          <div class="preferred-client">
+            <h4>Preferred Client</h4>
+            @for (client of clients; track client.name) {
+              @if (client.name === preferredClient()) {
+                <a [href]="getClientUrl(client)" target="_blank" class="client-link preferred">
+                  <div class="client-logo">
+                    <img [src]="client.logo" alt="{{ client.name }} logo" />
+                  </div>
+                  <div class="client-info">
+                    <div class="client-name">{{ client.name }}</div>
+                    <div class="client-description">{{ client.description }}</div>
+                  </div>
+                </a>
+              }
+            }
+          </div>
+        }
+        
+        <!-- Other clients -->
+        <div class="other-clients">
+          <h4>Other clients</h4>
+          @for (client of clients; track client.name) {
+            @if (client.name !== preferredClient()) {
+              <a [href]="getClientUrl(client)" target="_blank" class="client-link" (click)="setPreferredClient(client.name)">
+                <div class="client-logo">
+                  <img [src]="client.logo" alt="{{ client.name }} logo" />
+                </div>
+                <div class="client-info">
+                  <div class="client-name">{{ client.name }}</div>
+                  <div class="client-description">{{ client.description }}</div>
+                </div>
+              </a>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

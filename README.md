@@ -1,6 +1,6 @@
 # Nostria Find
 
-Lookup any Profile or Event on the Nostr network by relying on the Discovery Relays for seamless discovery.
+Lookup any Profile on the Nostr network by relying on the Discovery Relays for seamless discovery.
 
 ## Features
 

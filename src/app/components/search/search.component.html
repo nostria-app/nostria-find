@@ -1,0 +1,20 @@
+<div class="search-container">
+  <h1>Nostria Find</h1>
+  <p>Lookup any Profile on the Nostr network</p>
+  
+  <div class="search-form">
+    <input 
+      type="text"
+      [(ngModel)]="query"
+      placeholder="Enter npub, nprofile or hex public key..."
+      (keyup.enter)="search()" />
+      
+    <button (click)="search()" class="search-button">Search</button>
+  </div>
+
+  <br>
+  <p>
+  Example: <a [routerLink]="['/p', 'npub1zl3g38a6qypp6py2z07shggg45cu8qex992xpss7d8zrl28mu52s4cjajh']">Sondre (Nostria Founder)</a>
+  </p>
+
+</div>
