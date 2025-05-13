@@ -5,7 +5,6 @@ Lookup any Profile or Event on the Nostr network by relying on the Discovery Rel
 ## Features
 
 - **Search for Profiles**: Find any Nostr profile by entering the public key.
-- **Search for Events**: Look up any event by entering its ID.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
 
