@@ -6,6 +6,12 @@ export interface NostrClient {
 }
 
 export const NOSTR_CLIENTS: NostrClient[] = [
+    {
+    name: 'Nostria',
+    url: 'https://nostria.app/p/{npub}',
+    logo: 'assets/client-logos/nostria.svg',
+    description: 'Web/Desktop/iOS/Android client'
+  },
   {
     name: 'Damus',
     url: 'https://damus.io/npub/{npub}',
