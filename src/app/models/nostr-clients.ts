@@ -14,8 +14,8 @@ export const NOSTR_CLIENTS: NostrClient[] = [
   },
   {
     name: 'Damus',
-    url: 'https://damus.io/npub/{npub}',
-    logo: 'assets/client-logos/damus.svg',
+    url: 'https://damus.io/{npub}',
+    logo: 'assets/client-logos/damus.png',
     description: 'iOS/MacOS client'
   },
   {
@@ -33,7 +33,7 @@ export const NOSTR_CLIENTS: NostrClient[] = [
   {
     name: 'Coracle',
     url: 'https://coracle.social/{npub}',
-    logo: 'assets/client-logos/coracle.svg',
+    logo: 'assets/client-logos/coracle.webp',
     description: 'Web client'
   },
   {
