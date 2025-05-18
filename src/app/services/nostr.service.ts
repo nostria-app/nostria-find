@@ -5,7 +5,7 @@ import { nip19, SimplePool, type Event, Filter } from 'nostr-tools';
     providedIn: 'root'
 })
 export class NostrService {
-    private discoverRelay = 'wss://discovery-eu.nostria.app';
+    private discoverRelay = 'wss://discovery.eu.nostria.app';
     // private discoverRelay = 'wss://purplepag.es';
     private pool = new SimplePool();
 
