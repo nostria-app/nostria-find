@@ -1,1 +1,19 @@
-<div class="app-container"><router-outlet></router-outlet></div>
+<div class="app-container">
+
+    @if (isChecking) {
+    <app-loading-indicator [progress]="progress"></app-loading-indicator>
+    }
+
+    @if (showServerInfo() && selectedServer) {
+    <div class="server-info">
+        <div class="server-badge">
+            <span class="server-region">{{selectedServer.region}}</span>
+            <span class="server-name">{{selectedServer.name}}</span>
+            <span class="server-latency">{{selectedServer.latency}}ms</span>
+        </div>
+        <!-- <p class="server-message">Connected to fastest server in {{selectedServer.region}}</p> -->
+    </div>
+    }
+
+    <router-outlet></router-outlet>
+</div>

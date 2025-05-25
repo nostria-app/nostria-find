@@ -4,3 +4,43 @@
   padding: 0 20px;
   min-height: 100vh;
 }
+
+.server-info {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .server-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 6px 12px;
+
+    .server-region {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .server-name {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-right: 8px;
+    }
+
+    .server-latency {
+      background-color: var(--accent-color);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 12px;
+    }
+  }
+
+  .server-message {
+    margin-top: 10px;
+    color: var(--text-secondary);
+  }
+}
