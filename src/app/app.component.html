@@ -1,5 +1,4 @@
 <div class="app-container">
-
     @if (isChecking) {
     <app-loading-indicator [progress]="progress"></app-loading-indicator>
     }
@@ -21,7 +20,7 @@
         @if (showServerMenu()) {
         <div class="server-menu">
             <div class="server-menu-header">
-                <h4>Select Discovery Server</h4>
+                <h4>Select Discovery Relay</h4>
                 <button class="close-button" (click)="toggleServerMenu()">×</button>
             </div>
             <div class="server-list">
