@@ -16,14 +16,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private nostrService = inject(NostrService);
-  private themeService = inject(ThemeService);
+  themeService = inject(ThemeService);
   
   // Signals from services
   profile: Signal<any> = this.nostrService.getUserProfile();
   badges: Signal<any[]> = this.nostrService.getUserBadges();
   loading: Signal<boolean> = this.nostrService.getLoading();
   error: Signal<string | null> = this.nostrService.getError();
-  theme = this.themeService.getTheme();
   
   // Client related properties
   clients = NOSTR_CLIENTS;
@@ -59,10 +58,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   setPreferredClient(clientName: string): void {
     this.preferredClient.set(clientName);
     localStorage.setItem('preferredNostrClient', clientName);
-  }
-  
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
   }
   
   getClientUrl(client: NostrClient): string {

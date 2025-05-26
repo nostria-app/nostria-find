@@ -2,8 +2,8 @@
   <!-- Header with back button and theme toggle -->
   <header class="profile-header">
     <button (click)="goToSearch()" class="back-button">← Back to Search</button>
-    <button (click)="toggleTheme()" class="theme-toggle">
-      <span>{{ theme() === 'dark' ? '☀️' : '🌙' }}</span>
+    <button (click)="themeService.toggleTheme()" class="theme-toggle">
+      <span>{{ themeService.getTheme()() === 'dark' ? '☀️' : '🌙' }}</span>
     </button>
   </header>
   

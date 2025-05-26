@@ -1,4 +1,12 @@
 <div class="search-container">
+
+  <!-- Header with back button and theme toggle -->
+  <header class="profile-header">
+    <button (click)="themeService.toggleTheme()" class="theme-toggle">
+      <span>{{ themeService.getTheme()() === 'dark' ? '☀️' : '🌙' }}</span>
+    </button>
+  </header>
+
   <h1>Nostria Find</h1>
   <p>Lookup any Profile on the Nostr network</p>
   

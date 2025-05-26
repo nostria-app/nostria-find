@@ -4,40 +4,6 @@
   padding: 1rem;
 }
 
-/* Header styles */
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  
-  .back-button, .theme-toggle {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s;
-    
-    &:hover {
-      background-color: var(--accent-color);
-      color: white;
-      border-color: var(--accent-color);
-    }
-  }
-  
-  .theme-toggle {
-    width: 40px;
-    height: 40px;    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 1.2rem;
-  }
-}
-
 /* Loading styles */
 .loading-container {
   display: flex;
