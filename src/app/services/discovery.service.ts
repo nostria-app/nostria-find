@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { SimplePool } from 'nostr-tools';
 
 export interface ServerInfo {
   url: string;
@@ -25,14 +26,19 @@ export class DiscoveryService {
   ];
 
   isChecking = signal<boolean>(false);
-  selectedServer = signal<ServerInfo | null>(null);
+  selectedServer = signal<ServerInfo>(this.servers[0]);
   progress = signal<number>(0);
-  
+  discoveryPool: SimplePool | null = null;
+
+  getDiscoveryPool(): SimplePool {
+    return this.discoveryPool || (this.discoveryPool = new SimplePool());
+  }
+
   async checkServerLatency(): Promise<ServerInfo> {
     // Initially only check the first 3 servers as requested
-    const serversToCheck = this.servers.slice(0, 3);
+    const serversToCheck = this.servers;
     const results: ServerInfo[] = [];
-    
+
     this.isChecking.set(true);
     this.progress.set(0);
 
@@ -40,7 +46,7 @@ export class DiscoveryService {
       const server = serversToCheck[i];
       try {
         const startTime = performance.now();
-        await fetch(`${server.url}api/status`, { 
+        await fetch(`${server.url}api/status`, {
           method: 'GET',
           mode: 'cors',
           cache: 'no-cache',
@@ -49,33 +55,39 @@ export class DiscoveryService {
           }
         });
         const endTime = performance.now();
-        
-        const serverWithLatency = { 
-          ...server, 
-          latency: Math.round(endTime - startTime) 
+
+        const serverWithLatency = {
+          ...server,
+          latency: Math.round(endTime - startTime)
         };
-        
+
         results.push(serverWithLatency);
       } catch (error) {
         console.error(`Error checking ${server.name}:`, error);
         results.push({ ...server, latency: 9999 }); // High latency for failed servers
       }
-      
+
       this.progress.set(Math.round(((i + 1) / serversToCheck.length) * 100));
     }
-    
+
     // Sort by latency (lowest first) and select the best server
     results.sort((a, b) => (a.latency || 9999) - (b.latency || 9999));
     const bestServer = results[0];
-    
+
+    // Update all servers with their latency values
+    this.servers = results;
+
     this.isChecking.set(false);
     this.selectedServer.set(bestServer);
-    
+
     return bestServer;
   }
-  
+
   getServersByLatency(): ServerInfo[] {
-    return [...this.servers].filter(s => s.latency !== undefined)
-      .sort((a, b) => (a.latency || 9999) - (b.latency || 9999));
+    return [...this.servers].sort((a, b) => (a.latency || 9999) - (b.latency || 9999));
+  }
+
+  getAllServers(): ServerInfo[] {
+    return [...this.servers];
   }
 }

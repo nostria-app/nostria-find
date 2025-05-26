@@ -1,13 +1,14 @@
 import { Injectable, Signal, effect, inject, signal } from '@angular/core';
 import { nip19, SimplePool, type Event, Filter } from 'nostr-tools';
+import { DiscoveryService } from './discovery.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NostrService {
-    private discoverRelay = 'wss://discovery.eu.nostria.app';
+    // private discoverRelay = 'wss://discovery.eu.nostria.app';
     // private discoverRelay = 'wss://purplepag.es';
-    private pool = new SimplePool();
+    private userPool: SimplePool | null = new SimplePool();
 
     // User signals
     private userRelays = signal<string[]>([]);
@@ -16,6 +17,7 @@ export class NostrService {
     private userBadges = signal<Event[]>([]);
     private loading = signal<boolean>(false);
     private error = signal<string | null>(null);
+    private readonly discovery = inject(DiscoveryService);
 
     constructor() {
         effect(() => {
@@ -23,8 +25,13 @@ export class NostrService {
             const relays = this.userRelays();
             if (relays.length > 0) {
                 console.log('User relays updated:', relays);
+                this.userPool = new SimplePool();
             }
         });
+    }
+
+    getUserPool(): SimplePool {
+        return this.userPool || (this.userPool = new SimplePool());
     }
 
     // Public accessors for signals
@@ -100,7 +107,7 @@ export class NostrService {
     private async fetchUserRelays(pubkey: string): Promise<void> {
         try {
             // Query kind 10002 (relay list metadata) from discovery relay
-            const relayListEvents = await this.pool.get([this.discoverRelay], {
+            const relayListEvents = await this.discovery.getDiscoveryPool().get([this.discovery.selectedServer()?.url], {
                 kinds: [10002],
                 authors: [pubkey],
                 limit: 1
@@ -141,7 +148,7 @@ export class NostrService {
         const userRelays = this.userRelays();
 
         try {
-            const userMetadata = await this.pool.get(userRelays, {
+            const userMetadata = await this.getUserPool().get(userRelays, {
                 kinds: [0],
                 authors: [pubkey],
                 limit: 1
@@ -188,6 +195,9 @@ export class NostrService {
 
     // Close pool connections when done
     closeConnections(): void {
-        this.pool.close(this.userRelays());
+        if (this.userPool) {
+            this.userPool.close(this.userRelays());
+            this.userPool = null;
+        }
     }
 }

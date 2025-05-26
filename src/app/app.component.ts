@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   
   title = 'Nostria Find';
   showServerInfo = signal<boolean>(false);
+  showServerMenu = signal<boolean>(false);
+  availableServers = signal<ServerInfo[]>([]);
   
   constructor() {
     // Apply theme immediately on app load
@@ -29,6 +31,29 @@ export class AppComponent implements OnInit {
   
   async ngOnInit() {
     await this.discoveryService.checkServerLatency();
+    this.updateAvailableServers();
+    this.showServerInfo.set(true);
+  }
+  
+  toggleServerMenu(): void {
+    this.showServerMenu.update(value => !value);
+  }
+  
+  updateAvailableServers(): void {
+    const servers = this.discoveryService.getServersByLatency();
+    this.availableServers.set(servers);
+  }
+  
+  async selectServer(server: ServerInfo) {
+    this.discoveryService.selectedServer.set(server);
+    this.toggleServerMenu();
+  }
+  
+  async refreshServers(): Promise<void> {
+    this.showServerMenu.set(false);
+    this.showServerInfo.set(false);
+    await this.discoveryService.checkServerLatency();
+    this.updateAvailableServers();
     this.showServerInfo.set(true);
   }
   

@@ -10,8 +10,45 @@
             <span class="server-region">{{selectedServer.region}}</span>
             <span class="server-name">{{selectedServer.name}}</span>
             <span class="server-latency">{{selectedServer.latency}}ms</span>
+            <button class="config-button" (click)="toggleServerMenu()" title="Configure discovery server">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a2 2 0 0 0-2 2v1.6c-.95.24-1.85.64-2.66 1.19l-1.36-.95a2 2 0 0 0-2.76.55L1.8 9.01a2 2 0 0 0 .55 2.76l1.36.95c-.03.32-.05.65-.05.98 0 .33.02.66.05.98l-1.36.95a2 2 0 0 0-.55 2.76l1.42 2.62a2 2 0 0 0 2.76.55l1.36-.95c.81.55 1.71.95 2.66 1.19V22a2 2 0 0 0 2 2 2 2 0 0 0 2-2v-1.6c.95-.24 1.85-.64 2.66-1.19l1.36.95a2 2 0 0 0 2.76-.55l1.42-2.62a2 2 0 0 0-.55-2.76l-1.36-.95c.03-.32.05-.65.05-.98 0-.33-.02-.66-.05-.98l1.36-.95a2 2 0 0 0 .55-2.76l-1.42-2.62a2 2 0 0 0-2.76-.55l-1.36.95A8.02 8.02 0 0 0 14 5.6V4a2 2 0 0 0-2-2z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
         </div>
-        <!-- <p class="server-message">Connected to fastest server in {{selectedServer.region}}</p> -->
+        
+        @if (showServerMenu()) {
+        <div class="server-menu">
+            <div class="server-menu-header">
+                <h4>Select Discovery Server</h4>
+                <button class="close-button" (click)="toggleServerMenu()">×</button>
+            </div>
+            <div class="server-list">
+                @for (server of availableServers(); track server.url) {
+                <div 
+                    class="server-option" 
+                    [class.active]="selectedServer?.url === server.url"
+                    (click)="selectServer(server)">
+                    <span class="server-region">{{server.region}}</span>
+                    <span class="server-name">{{server.name}}</span>
+                    @if (server.latency !== undefined) {
+                    <span class="server-latency">{{server.latency}}ms</span>
+                    }
+                </div>
+                }
+            </div>
+            <div class="server-menu-footer">
+                <button class="refresh-button" (click)="refreshServers()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 0 1-9 9c-4.97 0-9-4.03-9-9s4.03-9 9-9h3"></path>
+                        <path d="m15 3 3 3-3 3"></path>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+        </div>
+        }
     </div>
     }
 
