@@ -76,7 +76,7 @@
     position: absolute;
     top: calc(100% + 5px);
     left: 0;
-    width: 300px;
+    width: 400px;
     background-color: var(--bg-primary);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -110,7 +110,7 @@
     }
     
     .server-list {
-      max-height: 250px;
+      max-height: 350px;
       overflow-y: auto;
       
       .server-option {

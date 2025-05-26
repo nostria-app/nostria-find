@@ -135,10 +135,10 @@ export class NostrService {
             console.error('Error fetching user relays:', e);
             // Set fallback relays
             this.userRelays.set([
-                'wss://relay.damus.io',
-                'wss://relay.nostr.band',
-                'wss://nos.lol',
-                'wss://relay.snort.social'
+                'wss://relay.damus.io/',
+                'wss://relay.nostr.band/',
+                'wss://nos.lol/',
+                'wss://relay.snort.social/'
             ]);
         }
     }
