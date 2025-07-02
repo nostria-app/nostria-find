@@ -7,16 +7,28 @@ export interface NostrClient {
 
 export const NOSTR_CLIENTS: NostrClient[] = [
   {
+    name: 'Default Native Client',
+    url: 'nostr:{npub}',
+    logo: 'assets/client-logos/nostr.webp',
+    description: 'Launch using the default native client on your device'
+  },
+  {
+    name: 'Default Web Client',
+    url: 'web+nostr://{npub}',
+    logo: 'assets/client-logos/nostr.webp',
+    description: 'Launch using the default web client on your device'
+  },
+  {
     name: 'Nostria',
     url: 'https://nostria.app/p/{npub}',
     logo: 'assets/client-logos/nostria.svg',
     description: 'Web/Desktop/iOS/Android client'
   },
   {
-    name: 'Default Nostr Client',
-    url: 'web+nostr://{npub}',
-    logo: 'assets/client-logos/nostr.webp',
-    description: 'Launch using the default Nostr client on your device'
+    name: 'Primal',
+    url: 'https://primal.net/p/{npub}',
+    logo: 'assets/client-logos/primal.svg',
+    description: 'Web/iOS/Android client'
   },
   {
     name: 'Damus',
@@ -43,12 +55,6 @@ export const NOSTR_CLIENTS: NostrClient[] = [
     description: 'Web client'
   },
   {
-    name: 'Primal',
-    url: 'https://primal.net/p/{npub}',
-    logo: 'assets/client-logos/primal.svg',
-    description: 'Web/iOS/Android client'
-  },
-  {
     name: 'Iris',
     url: 'https://iris.to/{npub}',
     logo: 'assets/client-logos/iris.svg',
@@ -59,5 +65,11 @@ export const NOSTR_CLIENTS: NostrClient[] = [
     url: 'https://nostter.app/{npub}',
     logo: 'assets/client-logos/nostter.svg',
     description: 'Web client'
+  },
+    {
+    name: 'Yakihonne',
+    url: 'https://yakihonne.com/users/{npub}',
+    logo: 'assets/client-logos/yakihonne.png',
+    description: 'Web/iOS/Android client'
   },
 ];
