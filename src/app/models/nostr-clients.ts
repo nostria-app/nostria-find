@@ -6,11 +6,17 @@ export interface NostrClient {
 }
 
 export const NOSTR_CLIENTS: NostrClient[] = [
-    {
+  {
     name: 'Nostria',
     url: 'https://nostria.app/p/{npub}',
     logo: 'assets/client-logos/nostria.svg',
     description: 'Web/Desktop/iOS/Android client'
+  },
+  {
+    name: 'Default Nostr Client',
+    url: 'web+nostr://{npub}',
+    logo: 'assets/client-logos/nostr.webp',
+    description: 'Launch using the default Nostr client on your device'
   },
   {
     name: 'Damus',
@@ -53,5 +59,5 @@ export const NOSTR_CLIENTS: NostrClient[] = [
     url: 'https://nostter.app/{npub}',
     logo: 'assets/client-logos/nostter.svg',
     description: 'Web client'
-  }
+  },
 ];
