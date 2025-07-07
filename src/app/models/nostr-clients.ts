@@ -14,7 +14,7 @@ export const NOSTR_CLIENTS: NostrClient[] = [
   },
   {
     name: 'Default Web Client',
-    url: 'web+nostr://{npub}',
+    url: 'web+nostr:{npub}',
     logo: 'assets/client-logos/nostr.webp',
     description: 'Launch using the default web client on your device'
   },
@@ -66,7 +66,7 @@ export const NOSTR_CLIENTS: NostrClient[] = [
     logo: 'assets/client-logos/nostter.svg',
     description: 'Web client'
   },
-    {
+  {
     name: 'Yakihonne',
     url: 'https://yakihonne.com/users/{npub}',
     logo: 'assets/client-logos/yakihonne.png',
