@@ -39,10 +39,10 @@
             <img [src]="getImageUrl(profile().picture, 'avatar')" alt="Profile Picture" />
           </div>
           
-          <h1 class="profile-name">{{ profile().name || 'Anonymous' }}</h1>
+          <h1 class="profile-name">{{ profile().display_name || 'Anonymous' }}</h1>
           
-          @if (profile().display_name && profile().display_name !== profile().name) {
-            <h2 class="profile-display-name">{{ profile().display_name }}</h2>
+          @if (profile().name) {
+            <h2 class="profile-display-name">{{ profile().name }}</h2>
           }
           
           @if (profile().nip05) {
