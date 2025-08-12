@@ -16,7 +16,6 @@ export class DiscoveryService {
     { url: 'https://discovery.eu.nostria.app/', name: 'discovery.eu.nostria.app', region: 'Europe' },
     { url: 'https://discovery.us.nostria.app/', name: 'discovery.us.nostria.app', region: 'USA' },
     { url: 'https://discovery.af.nostria.app/', name: 'discovery.af.nostria.app', region: 'Africa' },
-    { url: 'https://index.eu.nostria.app/', name: 'index.eu.nostria.app', region: 'Europe' },
     { url: 'https://purplepag.es/', name: 'purplepag.es', region: 'Germany' },
     // { url: 'https://relay.damus.io/', name: 'relay.damus.io', region: 'USA (California)' },
     // { url: 'https://relay.nostr.band/', name: 'relay.nostr.band', region: 'Finland (Helsinki)' },
