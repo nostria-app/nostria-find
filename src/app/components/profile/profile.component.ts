@@ -5,6 +5,7 @@ import { NostrService } from '../../services/nostr.service';
 import { NostrClient, NOSTR_CLIENTS } from '../../models/nostr-clients';
 import { ThemeService } from '../../services/theme.service';
 import { DiscoveryService } from '../../services/discovery.service';
+import { NostrUtilsService } from '../../services/nostr-utils.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private nostrService = inject(NostrService);
   private discoveryService = inject(DiscoveryService);
+  private nostrUtils = inject(NostrUtilsService);
   themeService = inject(ThemeService);
   
   // Signals from services
@@ -74,19 +76,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   
   private async initializeProfileLoad(userId: string): Promise<void> {
-    // Store the user ID for later use
-    this.pendingUserId.set(userId);
-    
-    // If discovery is not running and no server is selected, start discovery
-    if (!this.isDiscovering() && !this.discoveryService.selectedServer()) {
-      try {
-        await this.discoveryService.checkServerLatency();
-      } catch (error) {
-        console.error('Failed to discover relays:', error);
-        // If discovery fails, the effect will still trigger the profile load
+    try {
+      // Parse the userId to hex format for the nostr service
+      // If it's already hex, keep it as hex
+      // If it's npub, convert to hex
+      const hexUserId = this.nostrUtils.parseToHex(userId);
+      
+      // Store the hex user ID for later use
+      this.pendingUserId.set(hexUserId);
+      
+      // If discovery should run (no saved server) and not currently running, start discovery
+      if (!this.isDiscovering() && this.discoveryService.shouldRunDiscovery()) {
+        try {
+          await this.discoveryService.checkServerLatency();
+        } catch (error) {
+          console.error('Failed to discover relays:', error);
+          // If discovery fails, the effect will still trigger the profile load
+        }
       }
+      // If discovery is already complete or running, the effect will handle the rest
+    } catch (error) {
+      // If parsing fails, navigate back to search with error
+      console.error('Invalid user ID format:', error);
+      this.router.navigate(['/']);
     }
-    // If discovery is already complete or running, the effect will handle the rest
   }
   
   async loadProfile(userId: string): Promise<void> {

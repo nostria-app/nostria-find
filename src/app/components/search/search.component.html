@@ -20,6 +20,12 @@
     <button (click)="search()" class="search-button">Search</button>
   </div>
 
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+
   <br>
   <p>
   Example: <a [routerLink]="['/p', 'npub1zl3g38a6qypp6py2z07shggg45cu8qex992xpss7d8zrl28mu52s4cjajh']">Sondre (Nostria Founder)</a>

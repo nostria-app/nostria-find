@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, effect } from '@angular/core';
 import { SimplePool } from 'nostr-tools';
 
 export interface ServerInfo {
@@ -12,6 +12,8 @@ export interface ServerInfo {
   providedIn: 'root'
 })
 export class DiscoveryService {
+  private readonly STORAGE_KEY = 'nostria-discovery-server';
+  
   private servers: ServerInfo[] = [
     { url: 'https://discovery.eu.nostria.app/', name: 'discovery.eu.nostria.app', region: 'Europe' },
     { url: 'https://discovery.us.nostria.app/', name: 'discovery.us.nostria.app', region: 'USA' },
@@ -31,12 +33,60 @@ export class DiscoveryService {
   ];
 
   isChecking = signal<boolean>(false);
-  selectedServer = signal<ServerInfo>(this.servers[0]);
+  selectedServer = signal<ServerInfo>(this.loadSavedServer() || this.servers[0]);
   progress = signal<number>(0);
   discoveryPool: SimplePool | null = null;
 
+  constructor() {
+    // Auto-save selected server whenever it changes
+    effect(() => {
+      const server = this.selectedServer();
+      if (server) {
+        this.saveSelectedServer(server);
+      }
+    });
+  }
+
   getDiscoveryPool(): SimplePool {
     return this.discoveryPool || (this.discoveryPool = new SimplePool());
+  }
+
+  /**
+   * Load the previously saved server from local storage
+   */
+  private loadSavedServer(): ServerInfo | null {
+    try {
+      const savedServer = localStorage.getItem(this.STORAGE_KEY);
+      if (savedServer) {
+        const parsedServer: ServerInfo = JSON.parse(savedServer);
+        // Verify that the saved server still exists in our server list
+        const serverExists = this.servers.find(s => s.url === parsedServer.url);
+        if (serverExists) {
+          return parsedServer;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load saved discovery server:', error);
+    }
+    return null;
+  }
+
+  /**
+   * Save the selected server to local storage
+   */
+  private saveSelectedServer(server: ServerInfo): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(server));
+    } catch (error) {
+      console.error('Failed to save discovery server:', error);
+    }
+  }
+
+  /**
+   * Check if we have a previously saved server
+   */
+  hasSavedServer(): boolean {
+    return this.loadSavedServer() !== null;
   }
 
   async checkServerLatency(): Promise<ServerInfo> {
@@ -83,6 +133,20 @@ export class DiscoveryService {
     this.selectedServer.set(bestServer);
 
     return bestServer;
+  }
+
+  /**
+   * Manually select a server (e.g., from the UI dropdown)
+   */
+  selectServer(server: ServerInfo): void {
+    this.selectedServer.set(server);
+  }
+
+  /**
+   * Get current server status - checks if we should run discovery
+   */
+  shouldRunDiscovery(): boolean {
+    return !this.hasSavedServer();
   }
 
   getServersByLatency(): ServerInfo[] {

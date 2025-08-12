@@ -30,7 +30,10 @@ export class AppComponent implements OnInit {
   }
   
   async ngOnInit() {
-    await this.discoveryService.checkServerLatency();
+    // Only run discovery if we don't have a saved server
+    if (this.discoveryService.shouldRunDiscovery()) {
+      await this.discoveryService.checkServerLatency();
+    }
     this.updateAvailableServers();
     this.showServerInfo.set(true);
   }
@@ -45,7 +48,7 @@ export class AppComponent implements OnInit {
   }
   
   async selectServer(server: ServerInfo) {
-    this.discoveryService.selectedServer.set(server);
+    this.discoveryService.selectServer(server);
     this.toggleServerMenu();
   }
   
