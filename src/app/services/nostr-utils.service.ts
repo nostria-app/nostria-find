@@ -27,6 +27,19 @@ export class NostrUtilsService {
   }
 
   /**
+   * Checks if a string is a valid nprofile
+   */
+  isValidNprofile(input: string): boolean {
+    try {
+      if (!input.startsWith('nprofile1')) return false;
+      const { data, type } = nip19.decode(input);
+      return type === 'nprofile' && typeof data === 'object' && 'pubkey' in data && this.isValidHex(data.pubkey);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Converts hex to npub
    */
   hexToNpub(hex: string): string {
@@ -55,8 +68,35 @@ export class NostrUtilsService {
   }
 
   /**
+   * Converts nprofile to hex
+   */
+  nprofileToHex(nprofile: string): string {
+    try {
+      if (!nprofile.startsWith('nprofile1')) {
+        throw new Error('Invalid nprofile format');
+      }
+      const { data, type } = nip19.decode(nprofile);
+      if (type !== 'nprofile' || typeof data !== 'object' || !('pubkey' in data)) {
+        throw new Error('Invalid nprofile format');
+      }
+      return data.pubkey;
+    } catch (e) {
+      throw new Error('Invalid nprofile format');
+    }
+  }
+
+  /**
+   * Converts nprofile to npub
+   */
+  nprofileToNpub(nprofile: string): string {
+    const hex = this.nprofileToHex(nprofile);
+    return this.hexToNpub(hex);
+  }
+
+  /**
    * Parses input and converts hex to npub if needed
    * Returns npub if input is hex, returns input as-is if already npub
+   * Converts nprofile to npub if input is nprofile
    */
   parseInputToNpub(input: string): string {
     const trimmedInput = input.trim();
@@ -69,12 +109,17 @@ export class NostrUtilsService {
       return trimmedInput;
     }
     
-    throw new Error('Invalid input format. Please use npub or hex format');
+    if (this.isValidNprofile(trimmedInput)) {
+      return this.nprofileToNpub(trimmedInput);
+    }
+    
+    throw new Error('Invalid input format. Please use npub, nprofile, or hex format');
   }
 
   /**
    * Parses npub to hex, but leaves hex as-is
    * Used for profile component to handle both hex URLs and npub inputs
+   * Also handles nprofile format
    */
   parseToHex(input: string): string {
     const trimmedInput = input.trim();
@@ -87,6 +132,10 @@ export class NostrUtilsService {
       return this.npubToHex(trimmedInput);
     }
     
-    throw new Error('Invalid input format. Please use npub or hex format');
+    if (this.isValidNprofile(trimmedInput)) {
+      return this.nprofileToHex(trimmedInput);
+    }
+    
+    throw new Error('Invalid input format. Please use npub, nprofile, or hex format');
   }
 }
