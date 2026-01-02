@@ -107,11 +107,18 @@ export class NostrService {
     private async fetchUserRelays(pubkey: string): Promise<void> {
         try {
             // Query kind 10002 (relay list metadata) from discovery relay
-            const relayListEvents = await this.discovery.getDiscoveryPool().get([this.discovery.selectedServer()?.url], {
-                kinds: [10002],
-                authors: [pubkey],
-                limit: 1
-            });
+            // Use a longer timeout (10 seconds) to allow slower relays to respond
+            const relayListEvents = await this.discovery.getDiscoveryPool().get(
+                [this.discovery.selectedServer()?.url],
+                {
+                    kinds: [10002],
+                    authors: [pubkey],
+                    limit: 1
+                },
+                {
+                    maxWait: 10000  // 10 seconds timeout
+                }
+            );
 
             if (relayListEvents) {
                 const relayUrls = relayListEvents.tags.filter((tag: any) => tag[0] === 'r').map((tag: any) => tag[1]);
@@ -148,11 +155,18 @@ export class NostrService {
         const userRelays = this.userRelays();
 
         try {
-            const userMetadata = await this.getUserPool().get(userRelays, {
-                kinds: [0],
-                authors: [pubkey],
-                limit: 1
-            });
+            // Use a longer timeout (10 seconds) for user relay queries
+            const userMetadata = await this.getUserPool().get(
+                userRelays,
+                {
+                    kinds: [0],
+                    authors: [pubkey],
+                    limit: 1
+                },
+                {
+                    maxWait: 10000  // 10 seconds timeout
+                }
+            );
 
             if (userMetadata) {
                 try {
