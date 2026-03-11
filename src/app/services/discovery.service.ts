@@ -20,6 +20,7 @@ export class DiscoveryService {
     // { url: 'https://discovery.af.nostria.app/', name: 'discovery.af.nostria.app', region: 'Africa' },
     { url: 'https://purplepag.es/', name: 'purplepag.es', region: 'Germany' },
     { url: 'https://indexer.coracle.social/', name: 'indexer.coracle.social', region: 'USA' },
+    { url: 'https://indexer.openresist.com/', name: 'indexer.openresist.com', region: 'Europe' },
     // { url: 'https://relay.damus.io/', name: 'relay.damus.io', region: 'USA (California)' },
     // { url: 'https://relay.nostr.band/', name: 'relay.nostr.band', region: 'Finland (Helsinki)' },
     // { url: 'https://nos.lol/', name: 'nos.lol', region: 'Germany' },
